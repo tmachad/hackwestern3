@@ -62,12 +62,12 @@ $( document ).ready(function() {
 	var canvas = $( "#game" )[0];
 	var ctx = canvas.getContext("2d");
 	resizeCanvas(ctx);
-
-  	var id = 0;
     
+    var id = 0;
+
   	socket.on("playerID", function(data) {
 		id = data;
-		//console.log(id);
+		console.log(id);
 	});
 
   	socket.on("update", function(data) {
@@ -108,10 +108,10 @@ function render(ctx, canvas, myId, gameState) {
 		player = gameState[i];
 		var size = 20;
 		var pos = new Vect(parseInt(player.position.x) - size/2, parseInt(player.position.y) - size/2);
-		console.log(pos);
+		//console.log(pos);
 		pos = pos.add(deltaMe);
-		console.log(pos);
-		console.log("-------------");
+		//console.log(pos);
+		//console.log("-------------");
 
 		ctx.fillStyle = player.colour;
 		ctx.beginPath();

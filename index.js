@@ -79,14 +79,19 @@ app.use(express.static(__dirname + '/public'));
 var players = [];
 var numPlayers = 0;
 
+var clients =[];
+
 io.on("connection", function(socket) {
+
+	clients.push(socket.id);
 
 	var me = null;
 	var playerID = null;
 
 	socket.on("create player", function(name) {
 		playerID = numPlayers;
-		io.emit("playerID", playerID);
+		//io.emit("playerID", playerID);
+		io.to(clients[clients.length - 1]).emit("playerID", playerID);
 		players.push(new Player(playerID, name, new Vect(100, 100), generateRandomColour()));
 		//console.log(new Player(playerID, name, new Vect(100, 100), generateRandomColour()));
 		me = players[players.length - 1]; 
@@ -97,7 +102,7 @@ io.on("connection", function(socket) {
 	setInterval(function(){ 
 		//console.log(players);
     	io.emit('update', JSON.stringify(players));
-	}, 2000);
+	}, 33);
 
 	socket.on("player update", function(data) {
 		if (me != null)
@@ -106,12 +111,12 @@ io.on("connection", function(socket) {
 			var hypotenuse = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
 			var moveVect = new Vect(direction.x/hypotenuse, direction.y/hypotenuse);
 
-			if ((me.getPosition().getX() + moveVect.getX()) > 1000)
-				moveVect.setX(1000 - me.getPosition().getX());
+			if ((me.getPosition().getX() + moveVect.getX()) > 5000)
+				moveVect.setX(5000 - me.getPosition().getX());
 			else if ((me.getPosition().getX() + moveVect.getX()) < 0)
 				moveVect.setX(0 - me.getPosition().getX());
-			if ((me.getPosition().getY() + moveVect.getY()) > 1000)
-				moveVect.setY(1000 - me.getPosition().getY());
+			if ((me.getPosition().getY() + moveVect.getY()) > 5000)
+				moveVect.setY(5000 - me.getPosition().getY());
 			else if ((me.getPosition().getY() + moveVect.getY()) < 0)
 				moveVect.setY(0 - me.getPosition().getY());
 /*
