@@ -73,13 +73,13 @@ $( document ).ready(function() {
 		var players = [];
 		var parsed = JSON.parse(data);
 		for (var player in parsed) {
-			console.log(player);
+			//console.log(player);
 			players.push(parsed[player]);
 			//players.push(new Player(player.id, player.name, player.position, player.colour));
 		}
-		console.log("---------");
-		console.log(data);
-		console.log(players);
+		//console.log("---------");
+		//console.log(data);
+		//console.log(players);
 		render(ctx, canvas, id, players);
 	});
 
