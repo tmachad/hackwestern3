@@ -39,7 +39,9 @@ $( document ).ready(function() {
 	var intervalVar = setInterval(gameLoop, frameDelay);
 	
 	function gameLoop() {
-		socket.emit('player update', movement);
+		$('#debug').text(JSON.stringify(movement));
+		socket.emit('player update', JSON.stringify(movement));
+		JSON.parse(JSON.stringify(movement));
 	}
 
 	var canvas = $( "#game" )[0];

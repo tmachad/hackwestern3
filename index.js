@@ -60,7 +60,8 @@ class Player {
 	}
 
 	move(dPosition) {
-		moveTo(this.position.add(dPosition));
+		//moveTo(this.position.add(dPosition));
+		this.position = this.position.add(dPosition);
 	}
 
 }
@@ -75,7 +76,9 @@ io.on("connection", function(socket) {
 
 	var playerID = numPlayers;
 	io.emit("playerID", playerID);
-	players.push = new Player(playerID, new Vect(0, 0), generateRandomColour());
+	players.push(new Player(playerID, "bob", new Vect(0, 0), generateRandomColour()));
+	var me = players[players.length - 1];
+	console.log("Player connected! ID: " + playerID + " length: " + players.length + " objID: "); 
 	numPlayers = numPlayers + 1;
 
 	setInterval(function(){ 
@@ -83,23 +86,24 @@ io.on("connection", function(socket) {
 	}, 33);
 
 	socket.on("player update", function(data) {
-		var direction = JSON.parse(data);
-		var hypotenuse = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
-		var moveVect = new Vect(direction.getX()/hypotenuse, direction.getY()/hypotenuse);
-		players[socket.playerID].move(moveVect);
+		if (me != null)
+		{
+			var direction = JSON.parse(data);
+			var hypotenuse = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
+			var moveVect = new Vect(direction.x/hypotenuse, direction.y/hypotenuse);
+			me.move(moveVect);
+		}
+		//else
+			//console.log("me is undefined");
 	});
 
 	socket.on("disconnect", function() {
-
-		players.splice(playerID, 1);
-		for (player in players) {
-			player.setID(playerID - 1);
+		for (var i = 0; i < players.length; i++) {
+			if (players[i].getID() == playerID)
+			{
+				players.splice(i, 1);
+			}
 		}
-
-		io.emit("user left", function() {
-			io.emit('update', JSON.stringify(players));
-		});
-		
 	});
 
 });
