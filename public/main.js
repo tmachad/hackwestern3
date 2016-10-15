@@ -6,7 +6,7 @@ function generateJSON() {
 		var x = Math.random() * window.innerWidth;
 		var y = Math.random() * window.innerHeight;
 		var size = (Math.random() * 30) + 10;
-		json += '{ "id":"' + i + '" , "x":"' + x + '", "y":"' + y + '", "size": "' + size + '", "colour": "#FF0000" },'
+		json += '{ "id":"' + i + '" , "position": {"x":"' + x + '", "y":"' + y + '"}, "size": "' + size + '", "colour": "#FF0000" },'
 	}
 	json = json.slice(0, -1);
 	json += ']}';
@@ -50,10 +50,6 @@ $( document ).ready(function() {
 		movement.y = movement.y / length;
 		
 	});
-	
-	socket.on("new message", function(data) {
-		//$("p").text(data);
-	});
 
 	var intervalVar = setInterval(gameLoop, frameDelay);
 	
@@ -68,25 +64,19 @@ $( document ).ready(function() {
 	resizeCanvas(ctx);
 
   	var id = 0;
-  	var camera = new Vect(0,0);
-
-
-  	var OGgameState = generateJSON();
-	var gameState = JSON.parse(OGgameState);
-  	(function renderLoop(i) {
-  		setTimeout(function() {
-			render(ctx, canvas, id, camera, gameState.players);
-			camera.setX(camera.getX()+1);
-			camera.setY(camera.getY()+1);
-  			if(--i) {
-  				renderLoop(i);
-  			}
-  		}, 33);
-  	})(1000);
     
+  	socket.on("PlayerID", function(data) {
+		id = data;
+	});
+
+  	socket.on("update", function(data) {
+		var players = JSON.parse(data);
+		render(ctx, canvas, id, players.players);
+	});
+
 });
 
-function render(ctx, canvas, myId, camera, gameState) {
+function render(ctx, canvas, myId, gameState) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	//ctx.lineWidth = 2;
 	ctx.strokeStyle = "#000000";
@@ -106,12 +96,8 @@ function render(ctx, canvas, myId, camera, gameState) {
 	for( var i = 0; i < gameState.length; i++ ) {
 		player = gameState[i];
 		var size = parseInt(player.size);
-		var pos = new Vect(parseInt(player.x) - size/2, parseInt(player.y) - size/2);
+		var pos = new Vect(parseInt(player.position.x) - size/2, parseInt(player.position.y) - size/2);
 		pos = pos.add(deltaMe);
-
-		if(player.id != myId) {
-			pos = pos.subtract(camera);
-		}
 
 		ctx.fillStyle = player.colour;
 		ctx.beginPath();
