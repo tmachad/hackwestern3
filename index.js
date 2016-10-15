@@ -9,8 +9,8 @@ var numPlayers = 0;
 class Vect {
 
 	constructor(x, y) {
-		setX(x);
-		setY(y);
+		this.x = x;
+		this.y = y;
 	}
 
 	setX(x) {
@@ -73,9 +73,9 @@ app.use(express.static(__dirname + '/public'));
 
 io.on("connection", function(socket) {
 
-	socket.playerID = numPlayers;
-	io.emit("playerID", socket.playerID);
-	players.push = new Player(socket.playerID, new Vect(0, 0), generateRandomColour());
+	var playerID = numPlayers;
+	io.emit("playerID", playerID);
+	players.push = new Player(playerID, new Vect(0, 0), generateRandomColour());
 	numPlayers = numPlayers + 1;
 
 	setInterval(function(){ 
@@ -91,9 +91,9 @@ io.on("connection", function(socket) {
 
 	socket.on("disconnect", function() {
 
-		players.splice(socket.playerID, 1);
+		players.splice(playerID, 1);
 		for (player in players) {
-			player.setID(socket.playerID - 1);
+			player.setID(playerID - 1);
 		}
 
 		io.emit("user left", function() {

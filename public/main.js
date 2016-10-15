@@ -1,3 +1,4 @@
+
 function generateJSON() {
 	var json = '{ "players": [';
 
