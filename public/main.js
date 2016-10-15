@@ -118,7 +118,9 @@ function render(ctx, canvas, myId, gameState) {
 		ctx.arc(dropPixel(player.position.x), dropPixel(player.position.y), size, 0, 2 * Math.PI);
 		//ctx.arc(dropPixel(100), dropPixel(100), 20, 0, 2 * Math.PI);
 		ctx.fill();
+		ctx.closePath();
 
+		ctx.beginPath();
 		ctx.strokeStyle = "#000000";
 		ctx.arc(dropPixel(pos.getX()), dropPixel(pos.getY()), size, 0, 2 * Math.PI);
 		ctx.stroke();
