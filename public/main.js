@@ -62,12 +62,12 @@ $( document ).ready(function() {
 	var canvas = $( "#game" )[0];
 	var ctx = canvas.getContext("2d");
 	resizeCanvas(ctx);
-
-  	var id = 0;
     
+    var id = 0;
+
   	socket.on("playerID", function(data) {
 		id = data;
-		//console.log(id);
+		console.log(id);
 	});
 
   	socket.on("update", function(data) {
