@@ -5,7 +5,8 @@ function generateJSON() {
 	for(var i = 0; i < 10; i++) {
 		var x = Math.random() * window.innerWidth;
 		var y = Math.random() * window.innerHeight;
-		json += '{ "name":"' + 0 + '" , "x":"' + x + '", "y":"' + y + '", "colour": "#FF0000" },'
+		var size = (Math.random() * 30) + 10;
+		json += '{ "id":"' + i + '" , "x":"' + x + '", "y":"' + y + '", "size": "' + size + '", "colour": "#FF0000" },'
 	}
 	json = json.slice(0, -1);
 	json += ']}';
@@ -13,6 +14,21 @@ function generateJSON() {
 }
 
 var socket = io.connect();
+
+$(window).resize(function(){
+    var canvas = $( "#game" )[0];
+	var ctx = canvas.getContext("2d");
+	resizeCanvas(ctx);
+});
+
+function resizeCanvas(ctx) {
+	ctx.canvas.width  = window.innerWidth;
+  	ctx.canvas.height = window.innerHeight;
+}
+
+function dropPixel(number) {
+	return (0.5 + number) << 0;
+}
 
 $( document ).ready(function() {
 
@@ -46,8 +62,7 @@ $( document ).ready(function() {
 
 	var canvas = $( "#game" )[0];
 	var ctx = canvas.getContext("2d");
-	ctx.canvas.width  = window.innerWidth;
-  	ctx.canvas.height = window.innerHeight;
+	resizeCanvas(ctx);
 
   	var id = 0;
   	var camera = new Vect(0,0);
@@ -68,42 +83,44 @@ $( document ).ready(function() {
     
 });
 
-function render(ctx, canvas, id, camera, gameState) {
+function render(ctx, canvas, myId, camera, gameState) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	//ctx.lineWidth = 2;
-	ctx.strokeStyle="#000000";
+	ctx.strokeStyle = "#000000";
 	ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+	var centre = new Vect(canvas.width / 2, canvas.height / 2);
+
+	var me = new Vect(0,0);
+	for( var i = 0; i < gameState.length; i++ ) {
+		if(gameState[i].id == myId) {
+			me = new Vect(gameState[i].x, gameState[i].y);
+		}
+	}
+	var deltaMe = centre.subtract(me);
 
 	//ctx.lineWidth = 1;
 	for( var i = 0; i < gameState.length; i++ ) {
 		player = gameState[i];
+		var size = parseInt(player.size);
+		var pos = new Vect(parseInt(player.x) - size/2, parseInt(player.y) - size/2);
+		pos = pos.add(deltaMe);
 
-		//var size = parseInt(player.size);
-		var size = 20;
-		var x = parseInt(player.x) - size/2;
-		var y = parseInt(player.y) - size/2;
-
-		if(i != id) {
-			x -= camera.getX();
-			y -= camera.getY();
+		if(player.id != myId) {
+			pos = pos.subtract(camera);
 		}
-
-		//ctx.save();
-		//ctx.translate(camera.x, camera.y);
 
 		ctx.fillStyle = player.colour;
 		ctx.beginPath();
-		ctx.arc(x, y, size, 0, 2 * Math.PI);
+		ctx.arc(dropPixel(pos.getX()), dropPixel(pos.getY()), size, 0, 2 * Math.PI);
 		ctx.fill();
 
 		ctx.strokeStyle = "#000000";
-		ctx.arc(x, y, size, 0, 2 * Math.PI);
+		ctx.arc(dropPixel(pos.getX()), dropPixel(pos.getY()), size, 0, 2 * Math.PI);
 		ctx.stroke();
 		ctx.closePath();
 
-		//ctx.restore();
 	}
-
 	
 }
 
@@ -132,5 +149,13 @@ class Vect {
 
 	add(vect) {
 		return new Vect(this.x + vect.x, this.y + vect.y);
+	}
+
+	subtract(vect) {
+		return new Vect(this.x - vect.x, this.y - vect.y);
+	}
+
+	toString() {
+		return "(" + this.x + ", " + this.y + ")";
 	}
 }
