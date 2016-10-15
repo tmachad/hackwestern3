@@ -1,0 +1,66 @@
+h1, h2, h3 {
+	text-align: center;
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+body, html {
+	min-height: 100%;
+}
+
+body {
+	background: linear-gradient(to bottom right, #F7ABBE, #f9c2d0);
+}
+
+.centered {
+	width: 80%;
+	max-width: 980px;
+	margin: 0 auto;
+}
+
+.background_display {
+	height: 60%;
+	background-image: url("http://wallpapercave.com/wp/cB6EE2m.jpg");
+	background-position: center;
+	padding: 10% 0 0 0;
+	overflow: hidden;
+}
+
+.main_title {
+	font-size: 42px;
+	text-shadow: 2px 2px 5px gray;
+}
+
+.cta {
+	display: block;
+
+	width: 200px;
+	height: 30px;
+	line-height: 30px;
+	margin: 10% auto 200px auto;
+	padding: 5px;
+	border-radius: 5px;
+
+	text-align: center;
+	border: 1px solid gray;
+	background: #1f52e9;
+	font-size: 24px;
+	color: black;
+}
+
+.cta:HOVER {
+	background: #3764eb;
+}
+
+.tri {
+	display: flex;
+
+	margin: 50px 0 0 0;
+}
+
+.tri > div {
+	flex: 1 0 auto;
+}
