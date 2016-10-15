@@ -76,10 +76,10 @@ server.listen(3000, function() {
 
 app.use(express.static(__dirname + '/public'));
 
-io.on("connection", function(socket) {
+var players = [];
+var numPlayers = 0;
 
-	var players = [];
-	var numPlayers = 0;
+io.on("connection", function(socket) {
 
 	var me = null;
 	var playerID = null;
@@ -90,11 +90,12 @@ io.on("connection", function(socket) {
 		players.push(new Player(playerID, name, new Vect(100, 100), generateRandomColour()));
 		//console.log(new Player(playerID, name, new Vect(100, 100), generateRandomColour()));
 		me = players[players.length - 1]; 
-		numPlayers = numPlayers + 1;
+		numPlayers++;
+		//console.log(numPlayers);
 	});
 
 	setInterval(function(){ 
-		console.log(players);
+		//console.log(players);
     	io.emit('update', JSON.stringify(players));
 	}, 2000);
 

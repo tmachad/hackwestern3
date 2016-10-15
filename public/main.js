@@ -65,8 +65,9 @@ $( document ).ready(function() {
 
   	var id = 0;
     
-  	socket.on("PlayerID", function(data) {
+  	socket.on("playerID", function(data) {
 		id = data;
+		//console.log(id);
 	});
 
   	socket.on("update", function(data) {
@@ -75,7 +76,7 @@ $( document ).ready(function() {
 		for (var player in parsed) {
 			players.push(parsed[player]);
 		}
-		console.log(players);
+		//console.log(players);
 		render(ctx, canvas, id, players);
 	});
 
@@ -91,22 +92,30 @@ function render(ctx, canvas, myId, gameState) {
 
 	var me = new Vect(0,0);
 	for( var i = 0; i < gameState.length; i++ ) {
+		//console.log(gameState[i]);
 		if(gameState[i].id == myId) {
-			me = new Vect(gameState[i].x, gameState[i].y);
+			//console.log(gameState[i]);
+			me = new Vect(gameState[i].position.x, gameState[i].position.y);
 		}
 	}
+	//console.log(me);
 	var deltaMe = centre.subtract(me);
+	//console.log(me);
+	//console.log(deltaMe)
 
 	//ctx.lineWidth = 1;
 	for( var i = 0; i < gameState.length; i++ ) {
 		player = gameState[i];
-		var size = parseInt(player.size);
+		var size = 20;
 		var pos = new Vect(parseInt(player.position.x) - size/2, parseInt(player.position.y) - size/2);
+		console.log(pos);
 		pos = pos.add(deltaMe);
+		console.log(pos);
+		console.log("-------------");
 
 		ctx.fillStyle = player.colour;
 		ctx.beginPath();
-		ctx.arc(dropPixel(player.position.x), dropPixel(player.position.y), 20, 0, 2 * Math.PI);
+		ctx.arc(dropPixel(player.position.x), dropPixel(player.position.y), size, 0, 2 * Math.PI);
 		//ctx.arc(dropPixel(100), dropPixel(100), 20, 0, 2 * Math.PI);
 		ctx.fill();
 
