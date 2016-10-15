@@ -1,0 +1,20 @@
+html, body {
+	height: 100%;
+}
+
+.game {
+	height: 100%;
+}
+
+.player {
+	position: relative;
+	border-radius: 50%;
+
+	width: 100px;
+	height: 100px;
+	top: 0;
+	left: 0;
+
+	background-color: red;
+	border: 1px solid black;
+}
