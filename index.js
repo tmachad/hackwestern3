@@ -47,6 +47,14 @@ class Player {
 		this.id = id;
 	}
 
+	setName(name) {
+		this.name = name;
+	}
+
+	getName() {
+		return this.name;
+	}
+
 	getID() {
 		return this.id;
 	}
@@ -60,7 +68,6 @@ class Player {
 	}
 
 	move(dPosition) {
-		//moveTo(this.position.add(dPosition));
 		this.position = this.position.add(dPosition);
 	}
 
@@ -74,12 +81,13 @@ app.use(express.static(__dirname + '/public'));
 
 io.on("connection", function(socket) {
 
-	var playerID = numPlayers;
-	io.emit("playerID", playerID);
-	players.push(new Player(playerID, "bob", new Vect(0, 0), generateRandomColour()));
-	var me = players[players.length - 1];
-	console.log("Player connected! ID: " + playerID + " length: " + players.length + " objID: "); 
-	numPlayers = numPlayers + 1;
+	socket.on("create player", function(name) {
+		var playerID = numPlayers;
+		io.emit("playerID", playerID);
+		players.push(new Player(playerID, name, new Vect(0, 0), generateRandomColour()));
+		var me = players[players.length - 1]; 
+		numPlayers = numPlayers + 1;
+	});
 
 	setInterval(function(){ 
     	io.emit('update', JSON.stringify(players));
@@ -91,10 +99,18 @@ io.on("connection", function(socket) {
 			var direction = JSON.parse(data);
 			var hypotenuse = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
 			var moveVect = new Vect(direction.x/hypotenuse, direction.y/hypotenuse);
+			if ((moveVect.getX() + 20 / 2) > 1000) {
+				moveVect.setX() = 1000 - 20 / 2;
+			} else if((moveVect.getX() - 20 / 2) < 0) {
+				moveVect.setX() = 0 + 20 / 2;
+			}
+			if ((moveVect.getY() + 20 / 2) > 1000) {
+				moveVect.setY() = 1000 - 20 / 2;
+			} else if((moveVect.getY() - 20 / 2) < 0) {
+				moveVect.setY() = 0 + 20 / 2;
+			}
 			me.move(moveVect);
 		}
-		//else
-			//console.log("me is undefined");
 	});
 
 	socket.on("disconnect", function() {
