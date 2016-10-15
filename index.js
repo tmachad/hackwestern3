@@ -87,19 +87,20 @@ io.on("connection", function(socket) {
 	socket.on("create player", function(name) {
 		playerID = numPlayers;
 		io.emit("playerID", playerID);
-		players.push(new Player(playerID, name, new Vect(0, 0), generateRandomColour()));
+		players.push(new Player(playerID, name, new Vect(100, 100), generateRandomColour()));
 		me = players[players.length - 1]; 
 		numPlayers = numPlayers + 1;
 	});
 
 	setInterval(function(){ 
-    	io.emit('update', players);
+		console.log(players);
+    	io.emit('update', JSON.stringify(players));
 	}, 33);
 
 	socket.on("player update", function(data) {
 		if (me != null)
 		{
-			var direction = JSON.parse(data);
+			var direction = data;
 			var hypotenuse = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
 			var moveVect = new Vect(direction.x/hypotenuse, direction.y/hypotenuse);
 			if ((moveVect.getX() + 20 / 2) > 1000) {

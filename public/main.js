@@ -54,8 +54,8 @@ $( document ).ready(function() {
 	var intervalVar = setInterval(gameLoop, frameDelay);
 	
 	function gameLoop() {
-		$('#debug').text(JSON.stringify(movement));
-		socket.emit('player update', JSON.stringify(movement));
+		$('#debug').text(movement);
+		socket.emit('player update', movement);
 		JSON.parse(JSON.stringify(movement));
 	}
 
@@ -70,8 +70,16 @@ $( document ).ready(function() {
 	});
 
   	socket.on("update", function(data) {
-		var players = data;
-		console.log(data)
+		var players = [];
+		var parsed = JSON.parse(data);
+		for (var player in parsed) {
+			console.log(player);
+			players.push(parsed[player]);
+			//players.push(new Player(player.id, player.name, player.position, player.colour));
+		}
+		console.log("---------");
+		console.log(data);
+		console.log(players);
 		render(ctx, canvas, id, players);
 	});
 
@@ -148,4 +156,43 @@ class Vect {
 	toString() {
 		return "(" + this.x + ", " + this.y + ")";
 	}
+}
+
+class Player {
+
+	constructor(id, name, position, colour) {
+		this.id = id;
+		this.name = name;
+		this.position = position;
+		this.colour = colour;
+	}
+
+	setID(id) {
+		this.id = id;
+	}
+
+	setName(name) {
+		this.name = name;
+	}
+
+	getName() {
+		return this.name;
+	}
+
+	getID() {
+		return this.id;
+	}
+
+	getPosition() {
+		return this.position;
+	}
+
+	moveTo(position) {
+		this.position = position;
+	}
+
+	move(dPosition) {
+		this.position = this.position.add(dPosition);
+	}
+
 }
