@@ -70,8 +70,9 @@ $( document ).ready(function() {
 	});
 
   	socket.on("update", function(data) {
-		var players = JSON.parse(data);
-		render(ctx, canvas, id, players.players);
+		var players = data;
+		console.log(data)
+		render(ctx, canvas, id, players);
 	});
 
 });

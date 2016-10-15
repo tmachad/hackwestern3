@@ -81,16 +81,19 @@ app.use(express.static(__dirname + '/public'));
 
 io.on("connection", function(socket) {
 
+	var me = null;
+	var playerID = null;
+
 	socket.on("create player", function(name) {
-		var playerID = numPlayers;
+		playerID = numPlayers;
 		io.emit("playerID", playerID);
 		players.push(new Player(playerID, name, new Vect(0, 0), generateRandomColour()));
-		var me = players[players.length - 1]; 
+		me = players[players.length - 1]; 
 		numPlayers = numPlayers + 1;
 	});
 
 	setInterval(function(){ 
-    	io.emit('update', JSON.stringify(players));
+    	io.emit('update', players);
 	}, 33);
 
 	socket.on("player update", function(data) {
@@ -100,14 +103,14 @@ io.on("connection", function(socket) {
 			var hypotenuse = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
 			var moveVect = new Vect(direction.x/hypotenuse, direction.y/hypotenuse);
 			if ((moveVect.getX() + 20 / 2) > 1000) {
-				moveVect.setX() = 1000 - 20 / 2;
+				moveVect.setX(1000 - 20 / 2);
 			} else if((moveVect.getX() - 20 / 2) < 0) {
-				moveVect.setX() = 0 + 20 / 2;
+				moveVect.setX(20/2);
 			}
 			if ((moveVect.getY() + 20 / 2) > 1000) {
-				moveVect.setY() = 1000 - 20 / 2;
+				moveVect.setY(1000 - 20 / 2);3
 			} else if((moveVect.getY() - 20 / 2) < 0) {
-				moveVect.setY() = 0 + 20 / 2;
+				moveVect.setY(20/2);
 			}
 			me.move(moveVect);
 		}
