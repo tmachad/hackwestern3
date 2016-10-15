@@ -96,7 +96,7 @@ io.on("connection", function(socket) {
 	setInterval(function(){ 
 		console.log(players);
     	io.emit('update', JSON.stringify(players));
-	}, 33);
+	}, 2000);
 
 	socket.on("player update", function(data) {
 		if (me != null)
@@ -111,7 +111,7 @@ io.on("connection", function(socket) {
 				moveVect.setX(0 - me.getPosition().getX());
 			if ((me.getPosition().getY() + moveVect.getY()) > 1000)
 				moveVect.setY(1000 - me.getPosition().getY());
-			else if (me.getPosition().getY() + moveVect.getY() < 0)
+			else if ((me.getPosition().getY() + moveVect.getY()) < 0)
 				moveVect.setY(0 - me.getPosition().getY());
 /*
 			if ((me.getPosition().getX() + 20 / 2) > 1000) {

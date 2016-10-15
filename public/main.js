@@ -73,13 +73,9 @@ $( document ).ready(function() {
 		var players = [];
 		var parsed = JSON.parse(data);
 		for (var player in parsed) {
-			//console.log(player);
 			players.push(parsed[player]);
-			//players.push(new Player(player.id, player.name, player.position, player.colour));
 		}
-		//console.log("---------");
-		//console.log(data);
-		//console.log(players);
+		console.log(players);
 		render(ctx, canvas, id, players);
 	});
 
@@ -110,7 +106,8 @@ function render(ctx, canvas, myId, gameState) {
 
 		ctx.fillStyle = player.colour;
 		ctx.beginPath();
-		ctx.arc(dropPixel(pos.getX()), dropPixel(pos.getY()), size, 0, 2 * Math.PI);
+		ctx.arc(dropPixel(player.position.x), dropPixel(player.position.y), 20, 0, 2 * Math.PI);
+		//ctx.arc(dropPixel(100), dropPixel(100), 20, 0, 2 * Math.PI);
 		ctx.fill();
 
 		ctx.strokeStyle = "#000000";
