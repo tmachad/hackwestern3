@@ -32,6 +32,9 @@ function dropPixel(number) {
 
 $( document ).ready(function() {
 
+	var username = prompt("Enter a username", "Username");
+	socket.emit('create player', username);
+	
 	var movement = {x:0.0, y:0.0};
 	var frameDelay = 1000/30;
 	
