@@ -3,7 +3,9 @@ html, body {
 }
 
 .game {
-	height: 100%;
+	display: block;
+	width: 80%;
+	margin: 0 auto;
 }
 
 .player {

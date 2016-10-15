@@ -8,69 +8,11 @@
 	  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
 	  crossorigin="anonymous"></script>
 	<script src="index.js"></script>
+	<script src="main.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 	<title>THE GAME</title>
 </head>
 <body>
-	<div class="game">
-		<div class="player"></div>
-	</div>
+	<canvas id="game" class="game"></canvas>
 </body>
 </html>
-
-<script type="text/javascript">
-	
-	class Vect {
-		constructor() {
-			constructor(0,0);
-		}
-
-		constructor(x, y) {
-			setX(x);
-			setY(y);
-		}
-
-		setX(x) {
-			this.x = x;
-		}
-
-		setY(y) {
-			this.y = y;
-		}
-
-		getX(x) {
-			return this.x;
-		}
-
-		getY(y) {
-			return this.y;
-		}
-
-		add(vect) {
-			return new Vect(this.x + vect.x, this.y + vect.y);
-		}
-	}
-
-	class Player {
-
-		constructor(name) {
-			constructor(name, new Vect(0,0), "#FF0000");
-		}
-
-		constructor(name, vect, colour) {
-			this.name = name;
-			this.vect = vect
-			this.colour = colour;
-		}
-
-		moveTo(vect) {
-			this.vect = vect;
-		}
-
-		move(dVect) {
-			moveTo(this.vect.add(dVect));
-		}
-
-	}
-
-</script>
