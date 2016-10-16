@@ -31,8 +31,8 @@ $( document ).ready(function() {
 		var length = Math.sqrt(Math.pow(movement.x, 2) + Math.pow(movement.y, 2));
 
 		//convert to unit vector
-		movement.x = movement.x / length;
-		movement.y = movement.y / length;
+		movement.x = (movement.x / length)*2.5;
+		movement.y = (movement.y / length)*2.5;
 
 		movement.id = id;
 		
