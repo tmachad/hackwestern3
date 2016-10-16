@@ -12,7 +12,7 @@ body, html {
 }
 
 body {
-	background: linear-gradient(to bottom right, #F7ABBE, #f9c2d0);
+	background: linear-gradient(to bottom right, #C17A76, #c98b88);
 }
 
 .centered {
@@ -23,14 +23,15 @@ body {
 
 .background_display {
 	height: 60%;
-	background-image: url("http://wallpapercave.com/wp/cB6EE2m.jpg");
+	background-image: url("http://www.commonground.coop/sites/default/files/vegetables%20wooden%20background-croppedx2.jpg");
+	background-size: cover;
 	background-position: center;
 	padding: 10% 0 0 0;
 	overflow: hidden;
 }
 
 .main_title {
-	font-size: 42px;
+	font-size: 62px;
 	text-shadow: 2px 2px 5px gray;
 }
 
@@ -45,7 +46,7 @@ body {
 	border-radius: 5px;
 
 	text-align: center;
-	border: 1px solid gray;
+	border: 2px solid #3764eb;
 	background: #1f52e9;
 	font-size: 24px;
 	color: black;
@@ -63,4 +64,19 @@ body {
 
 .tri > div {
 	flex: 1 0 auto;
+}
+
+.tri img {
+	display: block;
+	width: 80%;
+	max-width: 256px;
+	max-height: 320px;
+	margin: 0 auto;
+	object-fit: contain;
+}
+
+@media (max-width: 900px) {
+	.tri {
+		flex-direction: column;
+	}
 }
