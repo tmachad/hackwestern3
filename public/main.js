@@ -71,13 +71,36 @@ $( document ).ready(function() {
 
 function render(ctx, canvas, myId, gameState) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	//ctx.lineWidth = 2;
 	ctx.strokeStyle = "#000000";
 	ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+	var centre = new Vect(canvas.width / 2, canvas.height / 2);
+ 
+ 	var me = new Vect(0,0);
+ 	for( var i = 0; i < gameState.length; i++ ) {
+ 		//console.log(gameState[i]);
+ 		if(gameState[i].id == myId) {
+ 			//console.log(gameState[i]);
+ 			me = new Vect(gameState[i].position.x, gameState[i].position.y);
+ 		}
+	}
+	//console.log(me);
+	var deltaMe = centre.subtract(me);
+	//console.log(me);
+	//console.log(deltaMe)
+
+ 	//ctx.lineWidth = 1;
 
 	for( var i = 0; i < gameState.length; i++ ) {
 		player = gameState[i];
 		var size = 20;
 		var pos = new Vect(parseInt(player.position.x) - size/2, parseInt(player.position.y) - size/2);
+
+		//console.log(pos);
+ 		pos = pos.add(deltaMe);
+ 		//console.log(pos);
+ 		//console.log("-------------");
 
 		ctx.fillStyle = player.colour;
 		ctx.beginPath();
