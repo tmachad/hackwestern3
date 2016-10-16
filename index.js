@@ -94,7 +94,7 @@ io.on("connection", function(socket) {
 		io.to(clients[clients.length - 1]).emit("playerID", playerID);
 		players.push(new Player(playerID, name, new Vect(100, 100), generateRandomColour()));
 		//console.log(new Player(playerID, name, new Vect(100, 100), generateRandomColour()));
-		me = players[players.length - 1]; 
+		//me = players[players.length - 1]; 
 		numPlayers++;
 		//console.log(numPlayers);
 	});
@@ -105,33 +105,35 @@ io.on("connection", function(socket) {
 	}, 33);
 
 	socket.on("player update", function(data) {
-		if (me != null)
-		{
-			var direction = data;
-			var hypotenuse = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
-			var moveVect = new Vect(direction.x/hypotenuse, direction.y/hypotenuse);
+		//if (me != null)
+		//{
+			var direction = JSON.parse(data);
+			console.log(direction);
+			var moveVect = new Vect(direction.x, direction.y);
+			//var hypotenuse = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
+			//var moveVect = new Vect(direction.x/hypotenuse, direction.y/hypotenuse);
 
-			if ((me.getPosition().getX() + moveVect.getX()) > 5000)
-				moveVect.setX(5000 - me.getPosition().getX());
-			else if ((me.getPosition().getX() + moveVect.getX()) < 0)
-				moveVect.setX(0 - me.getPosition().getX());
-			if ((me.getPosition().getY() + moveVect.getY()) > 5000)
-				moveVect.setY(5000 - me.getPosition().getY());
-			else if ((me.getPosition().getY() + moveVect.getY()) < 0)
-				moveVect.setY(0 - me.getPosition().getY());
-/*
-			if ((me.getPosition().getX() + 20 / 2) > 1000) {
-				me.getPosition()..setX(1000 - 20 / 2);
-			} else if((moveVect.getX() - 20 / 2) < 0) {
-				moveVect.setX(20/2);
+			if (direction.id != null) {
+
+				for (var i = 0; i < players.length; i++) {
+					if (players[i].getID() == direction.id)
+					{	
+						me = players[i];
+					}
+				}
+
+				if ((me.getPosition().getX() + moveVect.getX()) > 5000)
+					moveVect.setX(5000 - me.getPosition().getX());
+				else if ((me.getPosition().getX() + moveVect.getX()) < 0)
+					moveVect.setX(0 - me.getPosition().getX());
+				if ((me.getPosition().getY() + moveVect.getY()) > 5000)
+					moveVect.setY(5000 - me.getPosition().getY());
+				else if ((me.getPosition().getY() + moveVect.getY()) < 0)
+					moveVect.setY(0 - me.getPosition().getY());
+
+				me.move(moveVect);
 			}
-			if ((moveVect.getY() + 20 / 2) > 1000) {
-				moveVect.setY(1000 - 20 / 2);3
-			} else if((moveVect.getY() - 20 / 2) < 0) {
-				moveVect.setY(20/2);
-			}*/
-			me.move(moveVect);
-		}
+		//}
 	});
 
 	socket.on("disconnect", function() {

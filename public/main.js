@@ -1,18 +1,3 @@
-
-function generateJSON() {
-	var json = '{ "players": [';
-
-	for(var i = 0; i < 10; i++) {
-		var x = Math.random() * window.innerWidth;
-		var y = Math.random() * window.innerHeight;
-		var size = (Math.random() * 30) + 10;
-		json += '{ "id":"' + i + '" , "position": {"x":"' + x + '", "y":"' + y + '"}, "size": "' + size + '", "colour": "#FF0000" },'
-	}
-	json = json.slice(0, -1);
-	json += ']}';
-	return json;
-}
-
 var socket = io.connect();
 
 $(window).resize(function(){
@@ -35,8 +20,8 @@ $( document ).ready(function() {
 	var username = prompt("Enter a username", "Username");
 	socket.emit('create player', username);
 	
-	var movement = {x:0.0, y:0.0};
-	var frameDelay = 1000/30;
+	var movement = {x:0.0, y:0.0, id:null};
+	var frameDelay = 33;
 	
 	
 	window.addEventListener("mousemove", function (event) {
@@ -48,6 +33,8 @@ $( document ).ready(function() {
 		//convert to unit vector
 		movement.x = movement.x / length;
 		movement.y = movement.y / length;
+
+		movement.id = id;
 		
 	});
 
@@ -55,8 +42,8 @@ $( document ).ready(function() {
 	
 	function gameLoop() {
 		$('#debug').text(movement);
-		socket.emit('player update', movement);
-		JSON.parse(JSON.stringify(movement));
+		socket.emit('player update', JSON.stringify(movement));
+		//JSON.parse(JSON.stringify(movement));
 	}
 
 	var canvas = $( "#game" )[0];
